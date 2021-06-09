@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webSocket聊天室</title>
+</head>
+<body>
+<h1 style="text-align: center">web聊天</h1>
+<input type="text"  id="chatValue" onkeydown="calAge(event)";  >
+<button onclick="send()">发送</button>
+<div id="textContent">
+
+</div>
+<script src="/socket.io.js"></script>
+<script>
+    var socket =  io.connect('ws://localhost:8090',{transports: ['websocket']});
+    const name = "user" +new Date().getTime()
+    socket.send({
+        type:'LOGIN',
+        name
+    })
+    socket.on('message',(data)=>{
+        console.log(data)
+        const  {message,sender} = data
+        let senderName = sender
+        if(!sender){
+            senderName = '系统'
+
+        }else if(sender === name){
+              senderName = "我"
+        }
+        Message(senderName,message)
+    })
+
+
+    function Message(sender,message) {
+         let  textDiv = document.createElement('div')
+        textDiv.innerHTML =`<span>${sender}:<span><span>${message}</span>`
+        document.getElementById('textContent').append(textDiv)
+
+    }
+    function calAge(e) {
+        var evt = window.event || e;
+        if (evt.keyCode == 13) {
+            //回车后要干的业务代码
+            send()
+        }
+    }
+    function send() {
+
+          let chatInpt  = document.getElementById("chatValue")
+          socket.send({
+            type:'CHAT',
+            message:chatInpt.value
+         })
+        chatInpt.value =""
+    }
+</script>
+</body>
+</html>

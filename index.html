@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webSocket聊天室</title>
+</head>
+<body>
+<h1 style="text-align: center">web聊天</h1>
+<button onclick="chat()">开始聊天</button>
+<script>
+    function chat(){
+        let webSocket = new WebSocket('ws://dev.websocket:8090')
+        //wss ->websocket Secure
+        //https- tls/ssl - tcp/ip
+        // wss - tls- tcp/ip
+        webSocket.onopen = function () {
+            console.log('connection open');
+        }
+    }
+</script>
+</body>
+</html>
